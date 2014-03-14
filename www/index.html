@@ -23,20 +23,190 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+        <script src="js/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/soundjs-0.4.0.min.js"></script>
+
+        
+        <title>Silent Etude 01</title>
+        
+         <script type="application/javascript">
+        var txtandtiming = [{ "id": 0, "txt":'Listen to sounds close by', "audio": 'manuela2-1.mp3'},
+    		{ "id":1, "txt": 'Listen to sounds far away', "audio": "manuela2-2.mp3"},
+    		{ "id":2, "txt": 'Listen to all sounds surrounding you', "audio": 'manuela2-3.mp3'},
+    		{ "id":3, "txt": 'Listen to sounds coming from left', "audio": 'manuela2-4.mp3'},
+    		{ "id":4, "txt": 'Listen to sounds coming from right', "audio": 'manuela2-5.mp3'},
+    		{ "id":5, "txt": 'Focus your attention on sounds above you ', "audio": 'manuela2-6.mp3'},
+    		{ "id":6, "txt": 'Listen to sounds coming from all sides', "audio": 'manuela2-7.mp3'},
+    		{ "id":7, "txt": 'Remember the last song you heard', "audio": 'manuela2-8.mp3'},
+    		{ "id":8, "txt": 'Imagine the sound of the sea', "audio": 'manuela2-9.mp3'},
+    		{ "id":9, "txt": 'Imagine the sound of a train', "audio": 'manuela2-10.mp3'},
+    		{ "id":10, "txt": 'Imagine the sound of a bonfire', "audio": 'manuela2-11.mp3'},
+            { "id":11, "txt": 'Listen to the sound of your blood pulsating', "audio": 'manuela2-12.mp3'}, 
+            { "id":12, "txt": 'Listen to sounds coming from behind you', "audio": 'manuela2-13.mp3'},
+            { "id":13, "txt": 'Remember the sound of a mosquito', "audio": 'manuela2-14.mp3'},
+            { "id":14, "txt": 'Listen to the rhytm of your breath', "audio": 'manuela2-15.mp3'},
+            { "id":15, "txt": 'Remember the sound of the voice of a person you love', "audio": 'manuela2-16.mp3'}
+	    ];
+        var manifest;
+    	var vievx, viewy, raf, timingnum, tekst;
+        var baggrundsfarve = '#003366', forgundsfarve = '#887733'
+
+        function tegnSiden() {
+            tekst = tegnStrengPaaSkaerm('Etude for listener 01');
+        }
+        
+        function cbTekst() {
+        	tekst.animate({'opacity':0}, 5000,  'ease-in-out', null);
+            
+        }
+        
+    	function beregnSidevariable(){
+    	    mainsvg = document.getElementById('mainsvg');
+    	    viewx = window.innerWidth - 30;
+            viewy = window.innerHeight - 30;
+        }
+        
+        function tegnStrengPaaSkaerm(content) {
+            raf.clear();
+            var thjde = viewy / 5;
+            if (viewx < viewy) {
+                thjde = viewy / 10;
+            } 
+            var t = raf.text(20, 20).attr({'text-anchor': 'start', 'font-size': thjde, 'stroke':baggrundsfarve, 'fill':baggrundsfarve });
+            var maxWidth = viewx - 40;
+            var words = content.split(" ");
+            var tempText = ""; 
+            for (var i=0; i < words.length; i++) { 
+                t.attr( "text", tempText + " " + words[i]); 
+                if (t.getBBox().width>maxWidth) { 
+                    tempText += "\n" + words[i]; 
+                } 
+                else { 
+                    tempText += " " + words[i]; 
+                } 
+            }
+            t.attr("text", tempText.substring(1));
+            t.attr({'y': (t._getBBox().height / 2) + 20, 'opacity': 0,'stroke': forgundsfarve, 'fill':forgundsfarve});
+            // t.animate({'stroke': forgundsfarve, 'fill':forgundsfarve}, 1200,  'ease-in-out', cbTekst);
+             t.animate({'opacity':0.5}, 1200,  'ease-in-out', cbTekst);
+            return(t);
+        }
+        
+        function callBackSlut() {
+            tekst = tegnStrengPaaSkaerm('Thank you');
+            createjs.Sound.play(-1);
+            setTimeout(initApp, 3000);
+        }
+        function emptyTimer() {
+        }
+
+        function callBackTimer() {
+            var cirkel;
+            tekst = tegnStrengPaaSkaerm(timing[timingnum].txt);
+            createjs.Sound.play(timing[timingnum].id);
+            cirkel  = raf.circle(3,3,2);
+            cirkel.animate({'cx': viewx}, timing[timingnum].dur, 'linear', emptyTimer);
+            console.log(timing[timingnum].dur);
+        	timingnum++;
+        	if (timingnum < timing.length) {
+        		setTimeout(callBackTimer, timing[timingnum - 1].dur);
+        	}
+        	else {
+        		setTimeout(callBackSlut, timing[timingnum - 1].dur);
+        	}
+        }
+        
+        function koerProgram(){
+        	setTimeout(callBackTimer, 6000);
+        }
+        
+        function createTimings(){
+            var hvorlangetider = document.getElementsByName('hvorlangtid');
+            var hvorlaenge;
+            for(var i = 0; i < hvorlangetider.length; i++){
+                if(hvorlangetider[i].checked){
+                    hvorlaenge = hvorlangetider[i].value;
+                }
+            }
+            console.log(hvorlaenge);
+        	timing = []
+        	for (var i = 0; i < 4; i++){
+        		var num = Math.floor((Math.random()* 6));
+        		timing[i] = { 'id': txtandtiming[num].id, 'txt':txtandtiming[num].txt, 'mp3': txtandtiming[num].audio, 'dur': (Math.floor((Math.random()*5) + 5)) * 1000};
+                txtandtiming.splice(num,1);
+        	}
+            for (var i = 4; i < 6; i++){
+        		var num = Math.floor((Math.random()*txtandtiming.length));
+        		timing[i] = { 'id': txtandtiming[num].id, 'txt':txtandtiming[num].txt, 'mp3': txtandtiming[num].audio, 'dur': (Math.floor((Math.random()*5) + 5)) * 1000};
+                txtandtiming.splice(num,1);
+        	}
+            var tidprstk = ((hvorlaenge * 60000.0) / 6.0);
+            
+            for (var i = 0; i < 6; i++){
+                timing[i].dur = tidprstk;
+            }
+        	timingnum = 0;
+        }
+        
+    function initLyde() {
+            manifest = new Array();
+            for (var i=0; i < timing.length; i++) {
+            manifest[i] = {'id': timing[i].id, 'src': "http://knudriis.dk/silence01/audio/" + timing[i].mp3 };
+            }
+            manifest[manifest.length] = {'id': -1, 'src': "http://knudriis.dk/silence01/audio/thankyou.mp3" }; 
+            console.log(manifest);
+            createjs.Sound.registerManifest(manifest);
+        }
+        
+        function startListening() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('mainsvg').style.display = 'block';
+            beregnSidevariable();
+            raf = Raphael("mainsvg", viewx, viewy);
+            //raf = Raphael(/*"mainsvg",*/ 0, 0,viewx, viewy);
+            createTimings();
+            initLyde();
+            tegnSiden();
+            koerProgram();
+        }
+        
+        
+        function initApp(){
+            // Når man kommer ind er #intro synlig og #mainsvg usynlig.
+            if (raf) {
+                raf.remove();
+            }
+            document.getElementById('intro').style.display = 'block';
+            document.getElementById('mainsvg').style.display = 'none';
+            
+        }
+    </script>
+
+        
     </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+<body onLoad="initApp();">
+    <div>
+        <div id="intro">
+            <h2>Etude for listener</h2>
+            <div style="text-align:center">
+                <button style="height:2em;border-radius:0.5em;" value="Start" onclick="startListening();">Start</button>
             </div>
+            <div style="text-align:center">
+                Duration:
+                <input type="radio" checked="true" name="hvorlangtid" value="5" />5 min.
+                <input type="radio" name="hvorlangtid" value="8" />8 min.
+                <input type="radio" name="hvorlangtid" value="11" />11 min.
+                <input type="radio" name="hvorlangtid" value="15" />15 min.
+                <input type="radio" name="hvorlangtid" value="20" />20 min.
+                <input type="radio" name="hvorlangtid" value="25" />25 min.
+            </div>
+        
+            <p>Use of this listening exercise will - over time - increase your listening skills and give you access to an infinite number of aural experiences.</p>
+            <p>Each time you practice, you will hear new sounds.</p>
+            <p>Ideal for walking, driving (yes, a safe app for driving), sailing, flying, sitting, lying and swimming. Ok, maybe not swimming, unless you operate a 110% guaranteed waterproof device.</p>
+        
         </div>
-        <script type="text/javascript" src="phonegap.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
-</html>
+    </div>
+    <div id="mainsvg" style="background-color:olivegreen;"></div>
+</body></html>
