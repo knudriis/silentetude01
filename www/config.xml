@@ -3,7 +3,7 @@
 <!-- config.xml reference: https://build.phonegap.com/docs/config-xml -->
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.knudriis.silent-etude-01"
+        id        = "dk.knudriis.silent-etude-01"
         version   = "1.0.0">
 
     <name>Silent Etude 01</name>
@@ -61,6 +61,7 @@
 
     <!-- Third party plugins -->
     <!-- A list of available plugins are available at https://build.phonegap.com/plugins -->
+    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" />
     <!-- 
         <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     -->
