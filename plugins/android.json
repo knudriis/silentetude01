@@ -5,15 +5,9 @@
     },
     "config_munge": {
         "res/xml/config.xml": {
-            "/*": {
-                "<feature name=\"LowLatencyAudio\"><param name=\"android-package\" value=\"com.rjfun.cordova.plugin.LowLatencyAudio\" /></feature>": 1
-            }
+            "/*": {}
         }
     },
-    "installed_plugins": {
-        "com.rjfun.cordova.plugin.lowlatencyaudio": {
-            "PACKAGE_NAME": "dk.knudriis.etude01"
-        }
-    },
+    "installed_plugins": {},
     "dependent_plugins": {}
 }
