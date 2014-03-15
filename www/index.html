@@ -50,7 +50,7 @@
         var manifest;
     	var vievx, viewy, raf, timingnum, tekst;
         var baggrundsfarve = '#003366', forgundsfarve = '#887733'
-
+        var my_media = 0;
         function tegnSiden() {
             tekst = tegnStrengPaaSkaerm('Etude for listener 01');
         }
@@ -94,16 +94,37 @@
         
         function callBackSlut() {
             tekst = tegnStrengPaaSkaerm('Thank you');
-            createjs.Sound.play(-1);
+            // createjs.Sound.play(-1);
             setTimeout(initApp, 3000);
         }
         function emptyTimer() {
         }
 
+             
+        function playAudio(url) {
+            /* Play the audio file at url */
+            if (my_media != 0){
+                my_media.release();    
+            }
+            my_media = new Media(url,
+            /* success callback  */
+                function () {
+                    console.log("playAudio():Audio Success");
+                },
+            /* error callback  */
+                function (err) {
+                    console.log("playAudio():Audio Error: " + err);
+                }
+            );
+            /* Play audio  */
+            my_media.play();
+        }     
+             
         function callBackTimer() {
             var cirkel;
             tekst = tegnStrengPaaSkaerm(timing[timingnum].txt);
-            createjs.Sound.play(timing[timingnum].id);
+            // createjs.Sound.play(timing[timingnum].id);
+            playAudio(manifest[timing[timingnum].id]);
             cirkel  = raf.circle(3,3,2);
             cirkel.animate({'cx': viewx}, timing[timingnum].dur, 'linear', emptyTimer);
             console.log(timing[timingnum].dur);
@@ -154,8 +175,8 @@
             manifest[i] = {'id': timing[i].id, 'src': "http://knudriis.dk/silence01/audio/" + timing[i].mp3 };
             }
             manifest[manifest.length] = {'id': -1, 'src': "http://knudriis.dk/silence01/audio/thankyou.mp3" }; 
-            console.log(manifest);
-            createjs.Sound.registerManifest(manifest);
+            // console.log(manifest);
+            // createjs.Sound.registerManifest(manifest);
         }
         
         function startListening() {

@@ -16,7 +16,7 @@
         Knud Riishøjgård
     </author>
 
-    <!--
+    <!--        
         If you do not want any permissions to be added to your app, add the
         following tag to your config.xml; you will still have the INTERNET
         permission on your app, which PhoneGap requires.
@@ -61,7 +61,7 @@
 
     <!-- Third party plugins -->
     <!-- A list of available plugins are available at https://build.phonegap.com/plugins -->
-    <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" />
+    <!-- Vi bruger den ligesom ikke lige nu <gap:plugin name="com.rjfun.cordova.plugin.lowlatencyaudio" /> -->
     <!-- 
         <gap:plugin name="com.phonegap.plugins.barcodescanner" />
     -->
